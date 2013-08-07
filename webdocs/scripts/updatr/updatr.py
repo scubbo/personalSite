@@ -28,6 +28,7 @@ def readUpdate(updatable):
 		response['data'] = readData
 	else:
 		response['status'] = 'END'
+	return response
 
 if __name__ == '__main__':
 	sys.stdout.write('Content-Type: application/json\r\n\r\n')
