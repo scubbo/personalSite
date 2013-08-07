@@ -4,13 +4,37 @@ import os
 import sys
 import json
 
-form = cgi.FieldStorage()
+def readUpdate(updatable):
+	response = {}
 
-sys.stderr = sys.stdout
+	# Only allow the script to read from pre-defined files
+	with file('updatables', 'r') as updatablesFile:
+		updatables = updatablesFile.read().split('\n')
 
-sys.stdout.write('Content-Type: application/json\r\n\r\n')
+	if updatable not in updatables and not updatable.startswith('/tmp/updatables/'):
+		response['status'] = 'ERROR'
+		response['message'] = 'Only predetermined files can be read by updatr'
+		return response
 
-mylist = ['hello', 'world']
-jsonOutput = json.dumps(mylist)
+	with file(updatable, 'r+') as uf:
+		# Read, split into lines, and filter out empty strings
+		readData = filter(lambda x: x, uf.read().split('\n'))
+		# Empty file
+		uf.seek(0)
+		uf.truncate()
 
-sys.stdout.write(jsonOutput)
+	if readData:
+		response['status'] = 'SUCCESS'
+		response['data'] = readData
+	else:
+		response['status'] = 'END'
+
+if __name__ == '__main__':
+	sys.stdout.write('Content-Type: application/json\r\n\r\n')
+
+	form = cgi.FieldStorage()
+	updatable = form.getvalue('updatable')
+
+        response = readUpdate(updatable)
+        jsonResponse = json.dumps(response)
+        sys.stdout.write(jsonResponse)
