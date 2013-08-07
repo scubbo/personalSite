@@ -15,27 +15,30 @@ def readUpdate(updatable):
 		response['status'] = 'ERROR'
 		response['message'] = 'Only predetermined files can be read by updatr'
 		return response
+	try:
+		with file(updatable, 'r+') as uf:
+			# Read, split into lines, and filter out empty strings
+			readData = filter(lambda x: x, uf.read().split('\n'))
+			# Empty file
+			uf.seek(0)
+			uf.truncate()
 
-	with file(updatable, 'r+') as uf:
-		# Read, split into lines, and filter out empty strings
-		readData = filter(lambda x: x, uf.read().split('\n'))
-		# Empty file
-		uf.seek(0)
-		uf.truncate()
-
-	if readData:
-		response['status'] = 'SUCCESS'
-		response['data'] = readData
-	else:
-		response['status'] = 'END'
-	return response
+		if readData:
+			response['status'] = 'SUCCESS'
+			response['data'] = readData
+		else:
+			response['status'] = 'END'
+		return response
+	except IOError:
+		response['status'] = 'ERROR'
+		response['message'] = 'Permission denied'
 
 if __name__ == '__main__':
 	sys.stdout.write('Content-Type: application/json\r\n\r\n')
 
 	form = cgi.FieldStorage()
-	updatable = form.getvalue('updatable')
+	inp = str(form.getvalue('updatable'))
 
-        response = readUpdate(updatable)
+        response = readUpdate(inp)
         jsonResponse = json.dumps(response)
         sys.stdout.write(jsonResponse)
