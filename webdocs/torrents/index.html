@@ -1,14 +1,41 @@
 <html>
-<head>
-	<title>Torrent Searcher And Downloader</title>
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
-	<link rel="stylesheet" href="style.css" />
-</head>
+	<head>
+		<title>Torrent Searcher And Downloader</title>
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<scripts type="text/javascript" src="main.js"></script>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div id="wrapper">
+			<input id="searchbox" type="text" placeholder="Enter torrent search">
+		</div>
+		<table id="torrents">
+		</table>
+	</body>
 
-<body>  
-  <div id="mainWrapper" class="mainWrapper">Test 12345</div>
-  
-  
-</body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#searchbox').keydown(function() {
+				if (event.which == 13) {
+					getTorrents();
+				}
+			});
+		});
+
+		function getTorrents() {
+			$('#torrents').html('<tr><th id="titleHeader">Title</th><th id="seedsHeader">Seeds</th><th id="directLinkHeader">Direct Link</th><th id="directDownloadHeader">Start Download</th>');
+			$.post('/cgi-bin/torrentSearch.py', {'query':$('#searchbox').val()}, 
+				function(data) {
+					$.each(data, function(i, val) {
+						$('#torrents').append('<tr><td>' + val.title + '</td><td>' + val.seeds + '</td><td><a href="' + val.url + '">Direct Link</a></td><td><a class="directDownload" x-url="' + val.url + '" x-hash="' + val.hash + '" x-title="' + val.title + '">START DOWNLOAD</a></td></tr>');
+					});
+					$('.directDownload').click(function() {
+						$(this).parent().parent().fadeOut();
+						$.post('/cgi-bin/startDownload.py', {'url':$(this).attr('x-url'), 'hash':$(this).attr('x-hash'), 'title':$(this).attr('x-title')});
+					});
+				}
+			);
+			
+		}
+	</script>
 </html>

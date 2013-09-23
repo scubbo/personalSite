@@ -1,10 +1,10 @@
 console.log('loaded');
-/*$(document).ready(function() {
-	/*$.post('/cgi-bin/getPiDiskUsage.sh', 
+$(document).ready(function() {
+	$.post('/scripts/torrents/getPiDiskUsage.sh', 
 		function(data) {
 			console.log(data);
 		}
-	);*/ /*
+	);
 
 	$('#searchbox').keydown(function() {
 		if (event.which == 13) {
@@ -28,4 +28,4 @@ function getTorrents() {
 		}
 	);
 	
-}*/
+}
