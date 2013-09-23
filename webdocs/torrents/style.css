@@ -1,0 +1,42 @@
+table {
+	border-spacing:0px;
+	margin-top:10px;
+	width:100%;
+}
+th {
+	border-top:1px solid black;
+	border-right:1px solid black;
+}
+th#titleHeader {
+	width:1057px;
+	border-left:1px solid black;
+}
+th#seedsHeader {
+	width:47px;
+}
+th#directLinkHeader {
+	width:94px;
+}
+th#directDownloadHeader {
+	width:216px;
+}
+tr {
+	line-height:40px;
+}
+td {
+	border-top: 1px solid black;
+}
+td:first-child {
+	border-left: 1px solid black;
+}
+td:last-child {
+	border-right: 1px solid black;
+}
+.directDownload {
+	margin:2px;
+	border-radius: 4px;
+	padding: 5px;
+	background-color: blue;
+	color: white;
+	cursor:pointer;
+}
