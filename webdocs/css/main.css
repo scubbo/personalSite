@@ -101,7 +101,7 @@ h1 {
   font-size:32px;
   margin-bottom:40px;
 }
-.blogEntryWrapper {
+.spamWrapper {
 /*  border-left:3px solid #0000CC;
   border-right:3px solid #0000CC;*/
   border:1px solid #AAA;
@@ -109,14 +109,19 @@ h1 {
   -webkit-border-radius:10px;
   border-radius:10px;
   margin:5px 10px 20px 10px;
+  min-height: 62px;
 }
 .blogEntryWrapper h3 {
   font-size:20px;
   font-weight:bold;
 }
-.blogEntryWrapper p {
+.spamWrapper p {
   padding:5px 5px 15px 5px;
   text-align:left
+}
+.tweetPic {
+    float:left;
+    margin: 8px;
 }
 /*Clearfix ahoy!*/
 .clearfix:after {

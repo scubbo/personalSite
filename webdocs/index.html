@@ -53,7 +53,7 @@
           for (var i=0;i<3;i++) {
            var newDiv = document.createElement('div');
            newDiv.setAttribute('id', 'blogEntryWrapper'+i.toString());
-           newDiv.setAttribute('class', 'blogEntryWrapper blogEntryWrapper'+i.toString());
+           newDiv.setAttribute('class', 'spamWrapper blogEntryWrapper blogEntryWrapper'+i.toString());
            var postTitleLink = document.createElement('a');
            postTitleLink.href = items[i]['link'];
            var postTitle = document.createElement('h3');
@@ -71,52 +71,40 @@
          }
           
         }
-        });
-        
-        var feed = new google.feeds.Feed("http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=scubbo");
-        feed.setNumEntries(5);
-        feed.load(function(result) {
-            if (!result.error) {
-                var handle = result.feed.link.replace('http://twitter.com/', '');
-                var items = result.feed.entries;
-
-                for (var i=0;i<items.length;i++) {
-                    var newDiv = document.createElement('div');
-                    newDiv.setAttribute('id', 'tweetEntryWrapper'+i.toString());
-                    newDiv.setAttribute('class', 'tweetEntryWrapper tweetEntryWrapper'+i.toString());
-                    var postBody = document.createElement('p');
-                    var regex = new RegExp('^' + handle + ': ');
-                    var postBodyContents = items[i]["content"].replace(regex, '');
-                    $(postBody).html(postBodyContents);
-
-                    newDiv.appendChild(postBody);
-                $('.tweetContainer').append(newDiv);
-                }
-            }  
-        });
+    });
+    
     }
     google.setOnLoadCallback(initialize);
     
-    
-    
     $(document).ready(function() {
     
-    /*    $.post("/scripts/tweets.py", {limit:'5'}, 
+        $.post("/scripts/quickTweets.py", 
             function(data) {
                 var theTweets = data;
                 for (var i=0;i<theTweets.length;i++) {
                     var newDiv = document.createElement('div');
                     newDiv.setAttribute('id', 'tweetWrapper'+i.toString());
-                    newDiv.setAttribute('class', 'tweetWrapper tweetWrapper'+i.toString());
-                    var postTitle = document.createElement('h3');
-                    var postTitleContents = document.createTextNode(theTweets[i]['title']);
-                    postTitle.appendChild(postTitleContents);
+                    newDiv.setAttribute('class', 'spamWrapper tweetWrapper tweetWrapper'+i.toString());
+
+                    var tweetPic = document.createElement('img');
+                    tweetPic.setAttribute('class', 'tweetPic');
+                    tweetPic.src = theTweets[i].user.profile_image_url;
+
+                    var tweetText = document.createElement('p');
+                    var tweetTextContents = document.createTextNode(theTweets[i]['text']);
+                    tweetText.appendChild(tweetTextContents);
                     
-                    newDiv.appendChild(postTitle);
+                    newDiv.appendChild(tweetPic);
+                    newDiv.appendChild(tweetText);
                     $('.tweetContainer').append(newDiv);
                 }
+
+                $('.tweetContainer').css('background-image','none');
+
             }
-        );*/
+        );
+
+        $.post("/scripts/tweets.py",function(data){console.log('updated cachedTweets')});
     });
     
   </script>
